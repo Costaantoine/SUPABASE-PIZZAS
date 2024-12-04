@@ -1,0 +1,87 @@
+// Documentation DBML du schéma de base de données
+// https://dbdiagram.io/
+
+Table users {
+  id uuid [pk]
+  email text [unique]
+  full_name text
+  phone text
+  address text
+  role text
+  created_at timestamptz
+  updated_at timestamptz
+}
+
+Table pizzas {
+  id bigserial [pk]
+  name text
+  description text
+  image_url text
+  category text
+  vegetarian boolean
+  ingredients text[]
+  price_small decimal
+  price_medium decimal
+  price_large decimal
+  active boolean
+  created_at timestamptz
+  updated_at timestamptz
+}
+
+Table extras {
+  id bigserial [pk]
+  name text
+  price decimal
+  active boolean
+  created_at timestamptz
+  updated_at timestamptz
+}
+
+Table orders {
+  id bigserial [pk]
+  user_id uuid [ref: > users.id]
+  status text
+  total decimal
+  created_at timestamptz
+  confirmed_at timestamptz
+  preparation_at timestamptz
+  ready_at timestamptz
+  estimated_ready_at timestamptz
+  updated_at timestamptz
+}
+
+Table order_items {
+  id bigserial [pk]
+  order_id bigint [ref: > orders.id]
+  pizza_id bigint [ref: > pizzas.id]
+  size text
+  quantity integer
+  unit_price decimal
+  removed_ingredients text[]
+  created_at timestamptz
+  updated_at timestamptz
+}
+
+Table order_item_extras {
+  id bigserial [pk]
+  order_item_id bigint [ref: > order_items.id]
+  extra_id bigint [ref: > extras.id]
+  quantity integer
+  unit_price decimal
+  created_at timestamptz
+  updated_at timestamptz
+}
+
+Table settings {
+  id bigserial [pk]
+  name text
+  description text
+  address text
+  phone text
+  email text
+  logo_url text
+  opening_hours jsonb
+  preparation_times jsonb
+  created_at timestamptz
+  updated_at timestamptz
+}
